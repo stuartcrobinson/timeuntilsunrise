@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Text Size Example</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+        #mydiv {
+            max-width: 600px;
+            width: 100%;
+            background-color: lightgrey;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+            /* Adjust the font size based on screen width, but capped by max-width of the div */
+            font-size: calc(10px + 2vw); /* Starts at 10px, scales with the viewport width */
+        }
+        /* Ensures that the font size doesn't become too large on wider screens */
+        @media (min-width: 600px) {
+            #mydiv {
+                font-size: calc(10px + 600px * 0.02); /* Equivalent to calc(10px + 2vw) at 600px viewport width */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="mydiv">text</div>
+</body>
+</html>

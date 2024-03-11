@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Div</title>
+    <style>
+        /* Basic reset for body margins */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Styling for the div */
+        #mydiv {
+            /* Ensures the div is 3 inches wide on desktop */
+            width: 288px; /* 96 pixels/inch * 3 inches */
+            /* Ensures text fills the div on all devices */
+            font-size: 16px; /* Adjust based on preference */
+            word-wrap: break-word;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        /* Responsive styling for mobile devices */
+        @media screen and (max-width: 600px) {
+            #mydiv {
+                /* Makes the div fill the screen width on mobile devices */
+                width: 100%;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="mydiv">Text</div>
+</body>
+</html>

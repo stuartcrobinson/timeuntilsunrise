@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Div Full Width Example</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            margin: 0;
+            padding: 0;
+        }
+        #mydiv {
+            max-width: 600px; /* Maximum width of the div */
+            width: 100%; /* Makes the div width fill the parent container */
+            background-color: lightgrey; /* Just for better visibility */
+            text-align: center; /* Center the text */
+            padding: 20px; /* Some padding for aesthetics */
+            box-sizing: border-box; /* Includes padding in the element's total width and height */
+        }
+    </style>
+</head>
+<body>
+    <div id="mydiv">text</div>
+</body>
+</html>

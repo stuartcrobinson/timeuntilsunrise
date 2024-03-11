@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sunrise Time Calculator</title>
+</head>
+<body>
+    <h1>Time Until Sunrise</h1>
+    <div id="timeUntilSunrise">Calculating...</div>
+
+    <script>
+        // Function to calculate and display time until sunrise
+        function updateTimeUntilSunrise(latitude, longitude) {
+            const apiUrl = `https://api.sunrise-sunset.org/json?lat=${latitude}&lng=${longitude}&formatted=0`;
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const sunrise = new Date(data.results.sunrise);
+                    const now = new Date();
+                    let difference = sunrise - now;
+
+                    // Convert difference from milliseconds to hours and minutes
+                    const hours = Math.floor(difference / (1000 * 60 * 60));
+                    difference -= hours * (1000 * 60 * 60);
+                    const minutes = Math.floor(difference / (1000 * 60));
+
+                    // Display the result
+                    document.getElementById('timeUntilSunrise').innerText = 
+                        `${hours} hour(s) and ${minutes} minute(s) until sunrise.`;
+                })
+                .catch(error => {
+                    console.error('Error fetching sunrise time:', error);
+                    document.getElementById('timeUntilSunrise').innerText = 
+                        'Unable to calculate sunrise time.';
+                });
+        }
+
+        // Get the viewer's location
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    updateTimeUntilSunrise(position.coords.latitude, position.coords.longitude);
+                }, () => {
+                    document.getElementById('timeUntilSunrise').innerText = 'Geolocation is not supported by this browser.';
+                });
+            } else {
+                document.getElementById('timeUntilSunrise').innerText = 'Geolocation is not supported by this browser.';
+            }
+        }
+
+        // Call getLocation when the page loads
+        window.onload = function() {
+            getLocation();
+        };
+    </script>
+</body>
+</html>

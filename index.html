@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Time Until Sunrise</title>
+</head>
+<body>
+    <div id="timeUntilSunrise">...</div>
+    <br/><br/>
+    sunrise: <span id="sunrise">loading...</span>
+    <br/>
+    lat, lon: <span id="lat">loading lat ...</span>,  <span id="lon">loading lon ... (this takes a while because it doesn't rely on your ip. so it works even with vpn)</span>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+<style>
+    /* Styling for the div */
+    #timeUntilSunrise {
+        font-size: 150px; /* Adjust based on preference */
+    }
+
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            document.getElementById('lat').textContent = latitude;
+            document.getElementById('lon').textContent = longitude;
+
+            updateTimeUntilSunrise(latitude, longitude);
+            setInterval(function() {
+                updateTimeUntilSunrise(latitude, longitude);
+            }, 60000); // Update every minute
+        }, function(error) {
+            console.error('Geolocation error:', error);
+            document.getElementById('timeUntilSunrise').textContent = 'Location access denied.';
+        });
+    } else {
+        document.getElementById('timeUntilSunrise').textContent = 'Geolocation is not supported by your browser.';
+    }
+});
+
+function updateTimeUntilSunrise(latitude, longitude) {
+    fetch(`https://api.sunrise-sunset.org/json?lat=${latitude}&lng=${longitude}&formatted=0`)
+    .then(response => response.json())
+    .then(data => {
+        const sunrise = new Date(data.results.sunrise);
+        const now = new Date();
+
+        // Adjust sunrise time to UTC and then to local time
+        const timezoneOffset = now.getTimezoneOffset() * 60000; // offset in milliseconds
+        // const localSunriseTime = new Date(sunrise.getTime() + timezoneOffset);
+        const localSunriseTime = new Date(sunrise.getTime());
+
+        document.getElementById('sunrise').textContent = sunrise;
+        // document.getElementById('localsunrise').textContent = localSunriseTime;
+
+        // localSunriseTime = sunrise;
+
+        // Check if sunrise time is before current time, adjust to next day if necessary
+        if (localSunriseTime < now) {
+            localSunriseTime.setDate(localSunriseTime.getDate() + 1);
+        }
+
+        const diffMs = localSunriseTime - now; // milliseconds between now & sunrise
+        const diffHrs = Math.floor((diffMs % 86400000) / 3600000); // hours
+        const diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
+
+        // Update the display
+        document.getElementById('timeUntilSunrise').textContent = `${diffHrs}:${diffMins.toString().padStart(2, '0')}`;
+    })
+    .catch(error => {
+        console.error('Error fetching sunrise data:', error);
+        document.getElementById('timeUntilSunrise').textContent = 'Error fetching data.';
+    });
+}
+
+</script>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sunrise Countdown</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+        }
+        #countdown {
+            width: 3in; /* Approximate width on desktop */
+            font-size: 5em; /* Large font size for the countdown */
+            text-align: center;
+            padding: 0.5em;
+            box-sizing: border-box;
+        }
+        .info {
+            font-size: 0.5em; /* Smaller print for the caption and additional info */
+            text-align: center;
+            margin: 5px 0;
+        }
+        @media (max-width: 600px) {
+            #countdown {
+                width: 80%; /* Fill width on mobile devices */
+                font-size: 10vw; /* Responsive font size based on viewport width */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="countdown">--:--</div>
+    <div class="info">Time until sunrise</div>
+    <div class="info" id="nextSunrise">Next sunrise: --:--</div>
+    <div class="info" id="locationDescription">Location: Loading...</div>
+
+    <script>
+        function updateTimeUntilSunrise(latitude, longitude) {
+            // Your existing function to update time until sunrise
+        }
+
+        function updateLocationDescription() {
+            const locale = navigator.language;
+            const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            const locationDescription = `${locale}, Time Zone: ${timeZone}`;
+            document.getElementById('locationDescription').innerText = `Location: ${locationDescription}`;
+        }
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    updateTimeUntilSunrise(position.coords.latitude, position.coords.longitude);
+                    updateLocationDescription();
+                }, () => {
+                    document.getElementById('locationDescription').innerText = 'Geolocation is not supported by this browser or permissions denied.';
+                });
+            } else {
+                document.getElementById('locationDescription').innerText = 'Geolocation is not supported by this browser.';
+            }
+        }
+
+        window.onload = function() {
+            getLocation();
+        };
+    </script>
+</body>
+</html>
